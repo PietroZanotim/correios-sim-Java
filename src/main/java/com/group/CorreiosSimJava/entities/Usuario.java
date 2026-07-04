@@ -1,18 +1,32 @@
 package com.group.CorreiosSimJava.entities;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 public abstract class Usuario {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String nome;
     private String cpf;
     private String numero;
     private String email;
 
-    public Usuario(String nome, String numero, String cpf, String email) {
+    // Relacionamento bidirecional mapeado pelo atributo "usuario" lá na classe Frete
+    @OneToMany(mappedBy = "usuario")
+    private List<Frete> fretes = new ArrayList<>();
+
+    public Usuario() {
+    }
+
+    public Usuario(Long id, String nome, String numero, String cpf, String email) {
+        this.id = id;
         this.nome = nome;
         this.numero = numero;
         this.cpf = cpf;
@@ -51,15 +65,27 @@ public abstract class Usuario {
         this.email = email;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<Frete> getFretes() {
+        return fretes;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Usuario usuario = (Usuario) o;
-        return Objects.equals(cpf, usuario.cpf);
+        return Objects.equals(id, usuario.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(cpf);
+        return Objects.hashCode(id);
     }
 }

@@ -1,15 +1,27 @@
 package com.group.CorreiosSimJava.entities;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
-@Entity
-public class Produto {
+@Embeddable
+public class Pacote {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String nome;
     private Double peso;
     private Double comprimento, largura, profundidade;
 
-    public Produto(String nome, Double peso, Double comprimento, Double largura, Double profundidade) {
+    // Relacionamento com o Frete
+    @ManyToOne
+    @JoinColumn(name = "frete_id")
+    private Frete frete;
+
+    public Pacote() {
+    }
+
+    public Pacote(String nome, Double peso, Double comprimento, Double largura, Double profundidade) {
         this.nome = nome;
         this.peso = peso;
         this.comprimento = comprimento;
