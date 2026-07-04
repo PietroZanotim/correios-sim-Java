@@ -28,7 +28,7 @@ public class Frete {
     private Estado destino;
 
     private Instant data;
-    private Double total;
+    private Double total=0.0;
 
     public Frete() {
     }
