@@ -28,6 +28,7 @@ public class Frete {
     private Estado destino;
 
     private Instant data;
+    private EntregaStatus entregaStatus;
     private Double total=0.0;
 
     public Frete() {
@@ -40,6 +41,7 @@ public class Frete {
         this.origem = origem;
         this.destino = destino;
         this.data = data;
+        setEntregaStatus(3);
     }
 
     public void calcularTotal() {
@@ -48,5 +50,63 @@ public class Frete {
 
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Estado getOrigem() {
+        return origem;
+    }
+
+    public void setOrigem(Estado origem) {
+        this.origem = origem;
+    }
+
+    public Estado getDestino() {
+        return destino;
+    }
+
+    public void setDestino(Estado destino) {
+        this.destino = destino;
+    }
+
+    public Instant getData() {
+        return data;
+    }
+
+    public void setData(Instant data) {
+        this.data = data;
+    }
+
+    public EntregaStatus getEntregaStatus() {
+        return entregaStatus;
+    }
+
+    public void setEntregaStatus(int valor) {
+        this.entregaStatus.setStatus(valor);
+    }
+
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
+    }
+
+    public List<Pacote> getListaPacotes() {
+        return listaPacotes;
+    }
 }

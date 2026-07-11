@@ -14,9 +14,7 @@ public abstract class Usuario {
     private Long id;
 
     private String nome;
-    private String cpf;
-    private String numero;
-    private String email;
+    private String senha;
 
     // Relacionamento bidirecional mapeado pelo atributo "usuario" lá na classe Frete
     @OneToMany(mappedBy = "usuario")
@@ -25,12 +23,10 @@ public abstract class Usuario {
     public Usuario() {
     }
 
-    public Usuario(Long id, String nome, String numero, String cpf, String email) {
+    public Usuario(Long id, String nome, String senha) {
         this.id = id;
         this.nome = nome;
-        this.numero = numero;
-        this.cpf = cpf;
-        this.email = email;
+        this.senha = senha;
     }
 
     public String getNome() {
@@ -41,36 +37,20 @@ public abstract class Usuario {
         this.nome = nome;
     }
 
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public String getNumero() {
-        return numero;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public List<Frete> getFretes() {
