@@ -1,7 +1,8 @@
 package com.group.CorreiosSimJava;
 
-import com.group.CorreiosSimJava.entities.UsuarioImpl.Admin;
+import com.group.CorreiosSimJava.entities.Usuario;
 import com.group.CorreiosSimJava.entities.UsuarioImpl.Cliente;
+import com.group.CorreiosSimJava.exceptions.*;
 import com.group.CorreiosSimJava.service.AdminService;
 import com.group.CorreiosSimJava.service.ClienteService;
 import com.group.CorreiosSimJava.service.FreteService;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.dao.DataAccessException;
 
 import java.util.Scanner;
 
@@ -38,6 +40,7 @@ public class CorreiosSimJavaAppApplication implements CommandLineRunner {
         int escolha = -1;
 
         while (flag) {
+            System.out.println();
             System.out.println("====== Correios Sim System ======");
             System.out.println("1. Entrar com meu usuário.");
             System.out.println("2. Criar usuário.");
@@ -50,16 +53,73 @@ public class CorreiosSimJavaAppApplication implements CommandLineRunner {
                 if (escolha < 1 || escolha > 3) {
                     System.out.println("Valor inválido.");
                     System.out.println();
+                    sc.nextLine();
                 }
             } catch (RuntimeException e) {
                 System.out.println("Valor inválido.");
                 System.out.println();
+                sc.nextLine();
                 continue;
             }
 
             if (escolha == 3) break; // Encerrar o programa;
 
             if (escolha == 1) { // Entrando com usuario;
+                String nome, senha;
+                while(true) {
+                    try {
+                        System.out.println("Digite o nome do usuário: ");
+                        nome = sc.nextLine();
+
+                        if(!("admin".equals(nome))){ // Caso nao seja admin;
+                            Cliente cliente = clienteService.findByName(nome);
+
+                            System.out.println("Digite a senha: ");
+                            senha = sc.nextLine();
+                            System.out.println();
+                            if(!senha.equals(cliente.getSenha())) throw new InvalidPasswordException("Senha inválida!");
+
+
+                        }
+                        else { // Caso seja admin;
+                            System.out.println("Digite a senha: ");
+                            senha = sc.nextLine();
+
+                            char a1= senha.charAt(5);
+                            char a2= senha.charAt(6);
+                            String concat = String.valueOf(a1);
+                            concat = concat.concat(String.valueOf(a2));
+                            int id = Integer.valueOf(concat);
+
+
+                            System.out.println();
+                        }
+                    }
+                    catch (InvalidCpfException e) {
+                        System.out.println(e.getMessage());
+                        System.out.println("Tente novamente.");
+                        System.out.println();
+                        continue;
+                    }
+                    catch (DatabaseInvalidException e) {
+                        System.out.println(e.getMessage());
+                        System.out.println("Tente novamente.");
+                        System.out.println();
+                        continue;
+                    }
+                    catch (InvalidPasswordException e) {
+                        System.out.println(e.getMessage());
+                        System.out.println("Tente novamente.");
+                        System.out.println();
+                        continue;
+                    }
+                    catch (NullPointerException e) {
+                        System.out.println("Formato digitado inválido!");
+                        System.out.println("Tente novamente.");
+                        System.out.println();
+                        continue;
+                    }
+                }
 
             } else { // Criando o usuário;
                 sc.nextLine();
@@ -75,35 +135,73 @@ public class CorreiosSimJavaAppApplication implements CommandLineRunner {
                         System.out.println("Digite a senha: ");
                         senha = sc.nextLine();
                         System.out.println();
-                        System.out.println("Digite o CPF: ");
+                        System.out.println("Digite o CPF (XXX.XXX.XXX-XX): ");
                         cpf = sc.nextLine();
+                        validaCpf(cpf);
                         System.out.println();
-                        System.out.println("Digite o número: ");
+                        System.out.println("Digite o número(XX XXXXX-XXXX): ");
                         numero = sc.nextLine();
+                        validaNumero(numero);
                         System.out.println();
                         System.out.println("Digite o email: ");
                         email = sc.nextLine();
+                        validaEmail(email);
                         System.out.println();
 
                         Cliente novoUsuario = new Cliente(null, nome, senha, cpf, numero, email);
-                        clienteService.salvarUsuario(novoUsuario);
+                        clienteService.saveUser(novoUsuario);
 
                         System.out.println("| ========================== |");
                         System.out.println("| Usuário salvo com sucesso! |");
                         System.out.println("| ========================== |");
+                        System.out.println("| Digite enter para continuar |");
                         sc.nextLine();
                         break;
 
-                    } catch (RuntimeException e) {
-                        System.out.println("Valor inválido.");
+                    }
+                    catch (InvalidCpfException e) {
+                        System.out.println(e.getMessage());
+                        System.out.println("Tente novamente.");
                         System.out.println();
                         continue;
                     }
-
+                    catch (InvalidEmailException e) {
+                        System.out.println(e.getMessage());
+                        System.out.println("Tente novamente.");
+                        System.out.println();
+                        continue;
+                    }
+                    catch (InvalidNumberException e){
+                        System.out.println(e.getMessage());
+                        System.out.println("Tente novamente.");
+                        System.out.println();
+                        continue;
+                    }
+                    catch (RuntimeException e) {
+                        System.out.println("Valor inválido.");
+                        System.out.println("Tente novamente.");
+                        System.out.println();
+                        continue;
+                    }
                 }
             }
         }
-
         System.out.println("Encerrando sistema...");
+    }
+
+    public void validaCpf(String cpf) {
+        if(cpf.charAt(3)!= '.' || cpf.charAt(7) != '.' || cpf.charAt(11) != '-' || cpf.length()!=14){
+            throw new InvalidCpfException("CPF digitado no formato inválido!");
+        }
+    }
+    public void validaEmail(String email){
+        if(!(email.contains("@gmail.com") || email.contains("@email.com") || email.contains("@hotmail.com"))){
+            throw new InvalidEmailException("Email digitado inválido!");
+        }
+    }
+    public void validaNumero(String numero) {
+        if(numero.charAt(2)!=' ' || numero.charAt(8)!='-'){
+            throw new InvalidNumberException("Número digitado no formato incorreto!");
+        }
     }
 }
