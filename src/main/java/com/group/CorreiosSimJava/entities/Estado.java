@@ -52,5 +52,4 @@ public enum Estado {
     public int getValor() {
         return valor;
     }
-
 }

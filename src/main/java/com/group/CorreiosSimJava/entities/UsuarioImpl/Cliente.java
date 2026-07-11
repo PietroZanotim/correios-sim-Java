@@ -1,5 +1,15 @@
 package com.group.CorreiosSimJava.entities.UsuarioImpl;
 
+import com.group.CorreiosSimJava.entities.Frete;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "tb_cliente")
 public class Cliente extends com.group.CorreiosSimJava.entities.Usuario {
 
     private Double saldo;
@@ -7,12 +17,16 @@ public class Cliente extends com.group.CorreiosSimJava.entities.Usuario {
     private String numero;
     private String email;
 
-    public Cliente(Long id, String nome, String senha, String cpf, String numero, String email, Double saldo) {
+    // Relacionamento bidirecional mapeado pelo atributo "usuario" lá na classe Frete
+    @OneToMany(mappedBy = "cliente")
+    private List<Frete> fretes = new ArrayList<>();
+
+    public Cliente(Long id, String nome, String senha, String cpf, String numero, String email) {
         super(id, nome, senha);
         this.cpf = cpf;
         this.numero = numero;
         this.email = email;
-        this.saldo = saldo;
+        this.saldo = 0.0;
     }
 
     public Double getSaldo() {
@@ -45,5 +59,9 @@ public class Cliente extends com.group.CorreiosSimJava.entities.Usuario {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Frete> getFretes() {
+        return fretes;
     }
 }

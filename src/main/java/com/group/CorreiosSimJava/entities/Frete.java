@@ -10,6 +10,7 @@ import java.util.List;
 @Entity
 public class Frete {
 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -28,6 +29,8 @@ public class Frete {
     private Estado destino;
 
     private Instant data;
+
+    @Enumerated(EnumType.STRING)
     private EntregaStatus entregaStatus;
     private Double total=0.0;
 
@@ -94,8 +97,8 @@ public class Frete {
         return entregaStatus;
     }
 
-    public void setEntregaStatus(int valor) {
-        this.entregaStatus.setStatus(valor);
+    public void setEntregaStatus(int codigo) {
+        this.entregaStatus = EntregaStatus.valueOf(codigo);
     }
 
     public Double getTotal() {

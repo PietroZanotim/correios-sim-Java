@@ -2,7 +2,8 @@ package com.group.CorreiosSimJava.entities;
 
 import jakarta.persistence.*;
 
-@Embeddable
+@Entity
+@Table(name = "tb_pacote")
 public class Pacote {
 
     @Id

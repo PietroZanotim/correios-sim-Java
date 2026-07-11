@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Table(name = "tb_usuario")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Usuario {
 
     @Id
@@ -15,10 +17,6 @@ public abstract class Usuario {
 
     private String nome;
     private String senha;
-
-    // Relacionamento bidirecional mapeado pelo atributo "usuario" lá na classe Frete
-    @OneToMany(mappedBy = "usuario")
-    private List<Frete> fretes = new ArrayList<>();
 
     public Usuario() {
     }
@@ -51,10 +49,6 @@ public abstract class Usuario {
 
     public void setSenha(String senha) {
         this.senha = senha;
-    }
-
-    public List<Frete> getFretes() {
-        return fretes;
     }
 
     @Override

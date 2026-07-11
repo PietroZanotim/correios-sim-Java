@@ -6,17 +6,22 @@ public enum EntregaStatus {
     SAIU_PARA_ENTREGA(2),
     ENTREGUE(3);
 
-    private int status;
+    private final int status;
 
     EntregaStatus(int valor) {
         this.status = valor;
     }
 
-    public int getStatus() {
+    public int getCodigo() {
         return status;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public static EntregaStatus valueOf(int codigo) {
+        for (EntregaStatus valor : EntregaStatus.values()) {
+            if (valor.getCodigo() == codigo) {
+                return valor;
+            }
+        }
+        throw new IllegalArgumentException("Código de status de entrega inválido!");
     }
 }
