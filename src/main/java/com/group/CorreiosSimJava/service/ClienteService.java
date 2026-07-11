@@ -19,7 +19,7 @@ public class ClienteService {
     }
 
     public Cliente findByName(String nome) {
-        Cliente obj = clienteRepository.findByName(nome);
+        Cliente obj = clienteRepository.findByNome(nome);
         if(obj==null) throw new DatabaseInvalidException("Usuário inexistente");
         else return obj;
     }

@@ -13,6 +13,9 @@ public class Admin extends Usuario {
 
     private Integer faixaControle;
 
+    public Admin() {
+    }
+
     public Admin(Long id, String nome, String senha, int valor) {
         super(id,nome, senha);
         this.faixaControle = valor;

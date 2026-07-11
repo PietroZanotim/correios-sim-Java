@@ -24,6 +24,8 @@ public class CorreiosSimJavaAppApplication implements CommandLineRunner {
     @Autowired
     private FreteService freteService;
 
+    Scanner sc = new Scanner(System.in);
+
     public static void main(String[] args) {
         SpringApplication.run(CorreiosSimJavaAppApplication.class, args);
     }
@@ -35,10 +37,9 @@ public class CorreiosSimJavaAppApplication implements CommandLineRunner {
 
     public void Iniciar() {
 
-        Scanner sc = new Scanner(System.in);
+
         boolean flag = true;
         int escolha = -1;
-
         while (flag) {
             System.out.println();
             System.out.println("====== Correios Sim System ======");
@@ -53,15 +54,14 @@ public class CorreiosSimJavaAppApplication implements CommandLineRunner {
                 if (escolha < 1 || escolha > 3) {
                     System.out.println("Valor inválido.");
                     System.out.println();
-                    sc.nextLine();
                 }
             } catch (RuntimeException e) {
                 System.out.println("Valor inválido.");
                 System.out.println();
-                sc.nextLine();
+
                 continue;
             }
-
+            sc.nextLine();
             if (escolha == 3) break; // Encerrar o programa;
 
             if (escolha == 1) { // Entrando com usuario;
@@ -79,7 +79,7 @@ public class CorreiosSimJavaAppApplication implements CommandLineRunner {
                             System.out.println();
                             if(!senha.equals(cliente.getSenha())) throw new InvalidPasswordException("Senha inválida!");
 
-
+                            TelaCliente(cliente); //Menu Cliente;
                         }
                         else { // Caso seja admin;
                             System.out.println("Digite a senha: ");
@@ -187,6 +187,63 @@ public class CorreiosSimJavaAppApplication implements CommandLineRunner {
             }
         }
         System.out.println("Encerrando sistema...");
+    }
+
+    public void TelaCliente(Cliente cliente){
+        int escolha;
+        boolean flag = true;
+        while(flag) {
+            System.out.println();
+            System.out.printf("====== Olá! %s ======\n", cliente.getNome());
+            System.out.println("1. Criar novo frete.");
+            System.out.println("2. Verificar fretes existentes.");
+            System.out.println("3. Verificar saldo.");
+            System.out.println("4. Sair.");
+            System.out.println();
+
+            System.out.println("Digite: ");
+            try {
+                escolha = sc.nextInt();
+                if (escolha < 1 || escolha > 3) {
+                    System.out.println("Valor inválido.");
+                    System.out.println();
+                    sc.nextLine();
+                    continue;
+                }
+            }
+            catch (RuntimeException e) {
+                System.out.println("Valor inválido.");
+                System.out.println("Tente novamente.");
+                System.out.println();
+                continue;
+            }
+
+            switch(escolha) {
+                case 1:
+                break;
+
+                case 2:
+                break;
+
+                case 3:
+                    System.out.printf("Saldo de %s:\n", cliente.getNome());
+                    System.out.printf("| ================= |");
+                    System.out.printf("| R$ %.2f |", cliente.getSaldo());
+                    System.out.printf("| ================= |");
+                break;
+
+                case 4:
+                    flag = false;
+                    System.out.println("Saindo do menu do cliente...");
+                    System.out.println("| Digite enter para continuar |");
+                    sc.nextLine();
+                break;
+            };
+        }
+    }
+
+    public void TelaAdmin() {
+
     }
 
     public void validaCpf(String cpf) {

@@ -21,6 +21,9 @@ public class Cliente extends com.group.CorreiosSimJava.entities.Usuario {
     @OneToMany(mappedBy = "cliente")
     private List<Frete> fretes = new ArrayList<>();
 
+    public Cliente() {
+    }
+
     public Cliente(Long id, String nome, String senha, String cpf, String numero, String email) {
         super(id, nome, senha);
         this.cpf = cpf;
