@@ -5,6 +5,7 @@ import com.group.CorreiosSimJava.entities.UsuarioImpl.Cliente;
 import com.group.CorreiosSimJava.service.AdminService;
 import com.group.CorreiosSimJava.service.ClienteService;
 import com.group.CorreiosSimJava.service.FreteService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,29 +15,23 @@ import java.util.Scanner;
 @SpringBootApplication
 public class CorreiosSimJavaAppApplication implements CommandLineRunner {
 
-
-    private final AdminService adminService;
-    private final ClienteService clienteService;
-    private final FreteService freteService;
-
-    // Construtor para o Spring injetar o Service
-    public CorreiosSimJavaAppApplication(AdminService adminService, ClienteService clienteService, FreteService freteService) {
-        this.adminService = adminService;
-        this.freteService = freteService;
-        this.clienteService = clienteService;
-    }
+    @Autowired
+    private AdminService adminService;
+    @Autowired
+    private ClienteService clienteService;
+    @Autowired
+    private FreteService freteService;
 
     public static void main(String[] args) {
         SpringApplication.run(CorreiosSimJavaAppApplication.class, args);
     }
+
     @Override
     public void run(String[] args) {
         Iniciar();
     }
 
     public void Iniciar() {
-
-        criarAdmin();
 
         Scanner sc = new Scanner(System.in);
         boolean flag = true;
@@ -110,12 +105,5 @@ public class CorreiosSimJavaAppApplication implements CommandLineRunner {
         }
 
         System.out.println("Encerrando sistema...");
-    }
-
-    public void criarAdmin() {
-        for (int i = 1; i <= 9; i++) {
-            Admin novoAdmin = new Admin(null, "admin", "admin".concat(String.valueOf(i)), i);
-            adminService.salvarAdmin(novoAdmin);
-        }
     }
 }
