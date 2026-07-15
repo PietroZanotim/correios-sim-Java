@@ -23,7 +23,6 @@ target/
 
 ### Properties ###
 *.properties
-*.xml
 mvnw
 *.cmd
 *.gitattributes
