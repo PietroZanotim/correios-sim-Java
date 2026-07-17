@@ -3,12 +3,13 @@ package com.group.CorreiosSimJava.gui;
 import com.group.CorreiosSimJava.entities.Frete;
 import com.group.CorreiosSimJava.service.AdminService;
 import com.group.CorreiosSimJava.service.FreteService;
-
+import org.springframework.stereotype.Component;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+@Component
 public class TelaLogin extends JFrame {
 
     private FreteService freteService;
