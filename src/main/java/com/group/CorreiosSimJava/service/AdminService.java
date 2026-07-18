@@ -11,16 +11,18 @@ import java.util.Optional;
 @Service
 public class AdminService {
 
-    @Autowired
-    private AdminRepository adminRepository;
+    private final AdminRepository adminRepository;
 
-    public void saveAdmin(Admin admin) {
-        adminRepository.save(admin);
+    public AdminService(AdminRepository adminRepository) {
+        this.adminRepository = adminRepository;
     }
 
-    public Admin findById(int id) {
-        Optional<Admin> obj = adminRepository.findById(Long.valueOf(id));
-        return obj.orElseThrow(() -> new DatabaseInvalidException("Usuario não encontrado"));
+    public Optional<Admin> autenticar(String nome, String senha) {
+        return adminRepository.findByNomeAndSenha(nome, senha);
+    }
+
+    public Admin salvarAdmin(Admin admin) {
+        return adminRepository.save(admin);
     }
 
 }
