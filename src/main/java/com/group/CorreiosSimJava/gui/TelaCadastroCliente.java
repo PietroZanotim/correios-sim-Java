@@ -32,7 +32,7 @@ public class TelaCadastroCliente extends JDialog {
         painelFormulario.add(txtNome);
         painelFormulario.add(new JLabel("Senha:"));
         painelFormulario.add(txtSenha);
-        painelFormulario.add(new JLabel("CPF (Apenas números):"));
+        painelFormulario.add(new JLabel("CPF (Ex:XXX.XXX.XXX-XX):"));
         painelFormulario.add(txtCpf);
         painelFormulario.add(new JLabel("Telefone:"));
         painelFormulario.add(txtNumero);
@@ -56,20 +56,22 @@ public class TelaCadastroCliente extends JDialog {
             String email = txtEmail.getText().trim();
 
             if (nome.isEmpty() || senha.isEmpty() || cpf.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Preencha pelo menos Nome, Senha e CPF!", "Aviso", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Preencha pelo menos Nome, Senha e CPF!", "Aviso",
+                        JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
-            //Validação simples de CPF;
-            if(cpf.length()!=14) {
-                JOptionPane.showMessageDialog(this, "CPF no formato inválido(Ex:XXX.XXX.XXX-XX)", "Aviso", JOptionPane.WARNING_MESSAGE);
+            // Validação simples de CPF;
+            if (cpf.length() != 14) {
+                JOptionPane.showMessageDialog(this, "CPF no formato inválido(Ex:XXX.XXX.XXX-XX)", "Aviso",
+                        JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            if(cpf.charAt(3)!='.' ||cpf.charAt(7)!='.'|| cpf.charAt(11)!='-') {
-                JOptionPane.showMessageDialog(this, "CPF no formato inválido(Ex:XXX.XXX.XXX-XX)", "Aviso", JOptionPane.WARNING_MESSAGE);
+            if (cpf.charAt(3) != '.' || cpf.charAt(7) != '.' || cpf.charAt(11) != '-') {
+                JOptionPane.showMessageDialog(this, "CPF no formato inválido(Ex:XXX.XXX.XXX-XX)", "Aviso",
+                        JOptionPane.WARNING_MESSAGE);
                 return;
             }
-
 
             try {
                 // Cria a instância passando 'null' pro ID (banco gera)
@@ -82,7 +84,8 @@ public class TelaCadastroCliente extends JDialog {
                 dispose();
             } catch (Exception ex) {
                 // Exibe a mensagem da exceção do Service (Ex: Nome reservado)
-                JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage(), "Falha no Cadastro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage(), "Falha no Cadastro",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 
