@@ -32,19 +32,20 @@ public class Frete {
 
     @Enumerated(EnumType.STRING)
     private EntregaStatus entregaStatus;
+
     private Double total=0.0;
 
     public Frete() {
     }
 
-    public Frete(Long id, Cliente cliente, List<Pacote> produtos, Estado origem, Estado destino, Instant data) {
+    public Frete(Long id, Cliente cliente, List<Pacote> produtos, Estado origem, Estado destino, Instant data, EntregaStatus status) {
         this.id = id;
         this.cliente = cliente;
         this.listaPacotes = produtos;
         this.origem = origem;
         this.destino = destino;
         this.data = data;
-        setEntregaStatus(3);
+        setEntregaStatus(status);
     }
 
     public void calcularTotal() {
@@ -137,8 +138,8 @@ public class Frete {
         return entregaStatus;
     }
 
-    public void setEntregaStatus(int codigo) {
-        this.entregaStatus = EntregaStatus.valueOf(codigo);
+    public void setEntregaStatus(EntregaStatus status) {
+        this.entregaStatus = status;
     }
 
     public Double getTotal() {

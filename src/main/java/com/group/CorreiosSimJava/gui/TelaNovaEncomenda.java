@@ -1,76 +1,76 @@
 package com.group.CorreiosSimJava.gui;
 
-import com.group.CorreiosSimJava.entities.Estado;
-import com.group.CorreiosSimJava.entities.Frete;
+import com.group.CorreiosSimJava.entities.*;
 import com.group.CorreiosSimJava.entities.UsuarioImpl.Cliente;
 import com.group.CorreiosSimJava.service.FreteService;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.Instant;
+import java.util.ArrayList;
 
 public class TelaNovaEncomenda extends JDialog {
-
     private final FreteService freteService;
     private final Cliente cliente;
+    private final Frete freteEmCriacao;
+    private final DefaultTableModel modeloPacotes;
 
     public TelaNovaEncomenda(JPanel parent, FreteService freteService, Cliente cliente) {
-        super((Frame) SwingUtilities.getWindowAncestor(parent), "Nova Encomenda", true);
+        super((Frame) SwingUtilities.getWindowAncestor(parent), "Criar Novo Frete", true);
         this.freteService = freteService;
         this.cliente = cliente;
+        this.freteEmCriacao = new Frete();
+        this.freteEmCriacao.setCliente(cliente);
 
-        setSize(400, 400);
-        setLocationRelativeTo(parent);
+        setSize(600, 500);
         setLayout(new BorderLayout(10, 10));
 
-        JPanel form = new JPanel(new GridLayout(6, 2, 5, 5));
-        form.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        JComboBox<Estado> cbOrigem = new JComboBox<>(Estado.values());
-        JComboBox<Estado> cbDestino = new JComboBox<>(Estado.values());
+        // Painel de Entrada de Pacotes
+        JPanel painelCampos = new JPanel(new GridLayout(6, 2, 5, 5));
+        JTextField txtNome = new JTextField();
         JTextField txtPeso = new JTextField();
-        JTextField txtComprimento = new JTextField();
-        JTextField txtLargura = new JTextField();
-        JTextField txtProfundidade = new JTextField();
+        JTextField txtC = new JTextField();
+        JTextField txtL = new JTextField();
+        JTextField txtP = new JTextField();
+        JButton btnAdd = new JButton("Adicionar Pacote");
 
-        form.add(new JLabel("Origem:")); form.add(cbOrigem);
-        form.add(new JLabel("Destino:")); form.add(cbDestino);
-        form.add(new JLabel("Peso (kg):")); form.add(txtPeso);
-        form.add(new JLabel("Comprimento (cm):")); form.add(txtComprimento);
-        form.add(new JLabel("Largura (cm):")); form.add(txtLargura);
-        form.add(new JLabel("Profundidade (cm):")); form.add(txtProfundidade);
+        painelCampos.add(new JLabel("Nome do Pacote:")); painelCampos.add(txtNome);
+        painelCampos.add(new JLabel("Peso (kg):")); painelCampos.add(txtPeso);
+        painelCampos.add(new JLabel("Comp (cm):")); painelCampos.add(txtC);
+        painelCampos.add(new JLabel("Larg (cm):")); painelCampos.add(txtL);
+        painelCampos.add(new JLabel("Prof (cm):")); painelCampos.add(txtP);
+        painelCampos.add(btnAdd);
 
-        add(form, BorderLayout.CENTER);
+        // Tabela de Pacotes Atuais
+        modeloPacotes = new DefaultTableModel(new String[]{"Nome", "Peso", "C", "L", "P"}, 0);
+        JTable tabela = new JTable(modeloPacotes);
 
-        JButton btnSalvar = new JButton("Salvar Encomenda");
-        btnSalvar.addActionListener(e -> salvar(
-                (Estado) cbOrigem.getSelectedItem(),
-                (Estado) cbDestino.getSelectedItem(),
-                txtPeso.getText(),
-                txtComprimento.getText(),
-                txtLargura.getText(),
-                txtProfundidade.getText()
-        ));
+        btnAdd.addActionListener(e -> {
+            Pacote p = new Pacote();
+            p.setNome(txtNome.getText());
+            p.setPeso(Double.parseDouble(txtPeso.getText()));
+            p.setComprimento(Double.parseDouble(txtC.getText()));
+            p.setLargura(Double.parseDouble(txtL.getText()));
+            p.setProfundidade(Double.parseDouble(txtP.getText()));
+            p.setFrete(freteEmCriacao);
 
-        JPanel botoes = new JPanel();
-        botoes.add(btnSalvar);
-        add(botoes, BorderLayout.SOUTH);
-    }
+            freteEmCriacao.getListaPacotes().add(p);
+            modeloPacotes.addRow(new Object[]{p.getNome(), p.getPeso(), p.getComprimento(), p.getLargura(), p.getProfundidade()});
+        });
 
-    private void salvar(Estado origem, Estado destino, String peso, String comp, String larg, String prof) {
-        try {
-            Frete frete = new Frete();
-            frete.setCliente(this.cliente);
-            frete.setOrigem(origem);
-            frete.setDestino(destino);
-            frete.setData(Instant.now());
-            // Aqui a lógica chama o cálculo total que definimos antes
-            frete.calcularTotal();
-
-            freteService.salvar(frete);
-            JOptionPane.showMessageDialog(this, "Frete criado com sucesso!");
+        // Rodapé de Finalização
+        JButton btnFinalizar = new JButton("Finalizar Frete e Salvar");
+        btnFinalizar.addActionListener(e -> {
+            freteEmCriacao.setOrigem((Estado) JOptionPane.showInputDialog(this, "Origem:", "Origem", JOptionPane.QUESTION_MESSAGE, null, Estado.values(), Estado.values()[0]));
+            freteEmCriacao.setDestino((Estado) JOptionPane.showInputDialog(this, "Destino:", "Destino", JOptionPane.QUESTION_MESSAGE, null, Estado.values(), Estado.values()[0]));
+            freteEmCriacao.setData(Instant.now());
+            freteEmCriacao.calcularTotal();
+            freteService.salvar(freteEmCriacao);
             dispose();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
-        }
+        });
+
+        add(painelCampos, BorderLayout.NORTH);
+        add(new JScrollPane(tabela), BorderLayout.CENTER);
+        add(btnFinalizar, BorderLayout.SOUTH);
     }
 }

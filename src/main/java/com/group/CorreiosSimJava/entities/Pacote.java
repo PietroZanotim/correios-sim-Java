@@ -2,6 +2,8 @@ package com.group.CorreiosSimJava.entities;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "tb_pacote")
 public class Pacote {
@@ -68,5 +70,25 @@ public class Pacote {
 
     public void setProfundidade(Double profundidade) {
         this.profundidade = profundidade;
+    }
+
+    public Frete getFrete() {
+        return frete;
+    }
+
+    public void setFrete(Frete frete) {
+        this.frete = frete;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Pacote pacote = (Pacote) o;
+        return Objects.equals(id, pacote.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

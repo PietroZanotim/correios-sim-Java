@@ -71,8 +71,8 @@ public class PainelAdmin extends JPanel {
             }
             Long idFrete = (Long) modeloTabela.getValueAt(linha, 0);
             Frete frete = freteService.buscarPorId(idFrete);
-            TelaRastreio rastreio = new TelaRastreio(frete);
-            rastreio.setVisible(true);
+            TelaDetalhesFrete rastreioDetalhado = new TelaDetalhesFrete(frete);
+            rastreioDetalhado.setVisible(true);
         });
 
         btnAlterarStatus.addActionListener(e -> alterarStatusFrete());
@@ -98,7 +98,7 @@ public class PainelAdmin extends JPanel {
 
         if (novoStatus != null && novoStatus != frete.getEntregaStatus()) {
             // Atualiza usando o número (código) do Enum, como definimos na refatoração
-            frete.setEntregaStatus(novoStatus.getCodigo());
+            frete.setEntregaStatus(novoStatus);
             freteService.salvar(frete); // O Spring cuida do UPDATE
             JOptionPane.showMessageDialog(this, "Status atualizado com sucesso!");
             carregarFretesDaFaixa();

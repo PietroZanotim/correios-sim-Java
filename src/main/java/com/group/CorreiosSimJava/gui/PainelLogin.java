@@ -80,7 +80,7 @@ public class PainelLogin extends JPanel {
             // Tenta achar como Admin
             Optional<Admin> admin = adminService.autenticar(nomeDigitado, senhaDigitada);
             if (admin.isPresent()) {
-                JOptionPane.showMessageDialog(this, "Bem-vindo, Admin " + nomeDigitado + "!");
+                JOptionPane.showMessageDialog(this, "Bem-vindo, Admin!");
                 limparCampos();
                 janelaPrincipal.fazerLogin(admin.get());
                 return;
