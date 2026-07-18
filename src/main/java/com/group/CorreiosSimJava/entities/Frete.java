@@ -49,13 +49,47 @@ public class Frete {
 
     public void calcularTotal() {
 
-        Double total =0.0;
-        for(Pacote pct : listaPacotes) {
-            total += pct.getComprimento()
-                    *pct.getLargura()
-                    *pct.getProfundidade()
-                    *pct.getPeso();
+        if (listaPacotes == null || listaPacotes.isEmpty()) {
+            this.total = 0.0;
+            return;
         }
+
+        double somaPesosParaCobranca = 0.0;
+
+        // 1. Calcula o peso de cada pacote
+        for (Pacote pacote : listaPacotes) {
+            // Peso real do pacote
+            double pesoFisico = pacote.getPeso() != null ? pacote.getPeso() : 0.0;
+
+            // Peso cúbico = (C x L x P) / 6000 (Fator de cubagem padrão dos Correios)
+            double comp = pacote.getComprimento() != null ? pacote.getComprimento() : 0.0;
+            double larg = pacote.getLargura() != null ? pacote.getLargura() : 0.0;
+            double prof = pacote.getProfundidade() != null ? pacote.getProfundidade() : 0.0;
+
+            double pesoCubado = (comp * larg * prof) / 6000.0;
+
+            // Pega o maior peso entre o físico e o cubado
+            somaPesosParaCobranca += Math.max(pesoFisico, pesoCubado);
+        }
+
+        // 2. Calcula a distância (diferença entre faixas dos estados)
+        int faixaOrigem = origem != null ? origem.getValor() : 1;
+        int faixaDestino = destino != null ? destino.getValor() : 1;
+
+        // Math.abs garante que o valor seja sempre positivo
+        int saltosDeFaixa = Math.abs(faixaOrigem - faixaDestino);
+
+        // 3. Aplica os preços
+        double valorBasePorKg = 15.00; // Custa 15 reais por Kg
+        double taxaPorSaltoDeFaixa = 12.50; // Cada faixa de distância custa 12,50 a mais
+
+        // Se estiver na mesma faixa, cobra apenas um salto mínimo para não ficar "grátis" a distância
+        if (saltosDeFaixa == 0) {
+            saltosDeFaixa = 1;
+        }
+
+        // 4. Fórmula final
+        this.total = (somaPesosParaCobranca * valorBasePorKg) + (saltosDeFaixa * taxaPorSaltoDeFaixa);
 
     }
 

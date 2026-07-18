@@ -27,6 +27,12 @@ public class FreteService {
 
     // Função admin: Criar/atualizar status
     public void salvar(Frete frete) {
+
+        frete.calcularTotal();
+        if (frete.getId() == null && frete.getEntregaStatus() == null) {
+            frete.setEntregaStatus(1);
+        }
+
         freteRepository.save(frete);
     }
 }
