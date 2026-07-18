@@ -3,9 +3,7 @@ package com.group.CorreiosSimJava.gui;
 import com.group.CorreiosSimJava.entities.Frete;
 import javax.swing.*;
 import java.awt.*;
-import org.springframework.stereotype.Component;
 
-@Component
 public class TelaRastreio extends JFrame {
 
     public TelaRastreio(Frete frete) {

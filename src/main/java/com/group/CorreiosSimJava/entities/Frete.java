@@ -49,7 +49,13 @@ public class Frete {
 
     public void calcularTotal() {
 
-
+        Double total =0.0;
+        for(Pacote pct : listaPacotes) {
+            total += pct.getComprimento()
+                    *pct.getLargura()
+                    *pct.getProfundidade()
+                    *pct.getPeso();
+        }
 
     }
 
