@@ -74,8 +74,8 @@ public class PainelCliente extends JPanel {
             }
             Long idFrete = (Long) modeloTabela.getValueAt(linhaSelecionada, 0);
             Frete frete = freteService.buscarPorId(idFrete);
-            TelaRastreio rastreio = new TelaRastreio(frete);
-            rastreio.setVisible(true);
+            TelaDetalhesFrete rastreioDetalhado = new TelaDetalhesFrete(frete);
+            rastreioDetalhado.setVisible(true);
         });
 
         carregarFretes();

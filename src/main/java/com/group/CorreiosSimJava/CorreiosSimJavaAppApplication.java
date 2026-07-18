@@ -26,7 +26,6 @@ public class CorreiosSimJavaAppApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // TODO: Mantenha ou remova a criação inicial de admins
         // Inicia a interface
         SwingUtilities.invokeLater(() -> {
             janelaPrincipal.setVisible(true);

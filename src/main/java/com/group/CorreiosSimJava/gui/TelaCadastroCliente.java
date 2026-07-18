@@ -60,6 +60,17 @@ public class TelaCadastroCliente extends JDialog {
                 return;
             }
 
+            //Validação simples de CPF;
+            if(cpf.length()!=14) {
+                JOptionPane.showMessageDialog(this, "CPF no formato inválido(Ex:XXX.XXX.XXX-XX)", "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            if(cpf.charAt(3)!='.' ||cpf.charAt(7)!='.'|| cpf.charAt(11)!='-') {
+                JOptionPane.showMessageDialog(this, "CPF no formato inválido(Ex:XXX.XXX.XXX-XX)", "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+
             try {
                 // Cria a instância passando 'null' pro ID (banco gera)
                 Cliente novoCliente = new Cliente(null, nome, senha, cpf, numero, email);
