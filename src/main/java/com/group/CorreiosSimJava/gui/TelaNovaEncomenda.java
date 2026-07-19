@@ -60,6 +60,10 @@ public class TelaNovaEncomenda extends JDialog {
 
         // Rodapé de Finalização
         JButton btnFinalizar = new JButton("Finalizar Frete e Salvar");
+
+        //Ordenar Alfabeticamente Enumeração
+        List<Estado> listaEstados = new ArrayList<>(List.of(Estado.values()));
+        Collections.sort(listaEstados, (e1, e2) -> e1.name().compareTo(e2.name()));
         btnFinalizar.addActionListener(e -> {
             freteEmCriacao.setOrigem((Estado) JOptionPane.showInputDialog(this, "Origem:", "Origem", JOptionPane.QUESTION_MESSAGE, null, Estado.values(), Estado.values()[0]));
             freteEmCriacao.setDestino((Estado) JOptionPane.showInputDialog(this, "Destino:", "Destino", JOptionPane.QUESTION_MESSAGE, null, Estado.values(), Estado.values()[0]));
