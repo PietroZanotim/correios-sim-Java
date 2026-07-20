@@ -8,6 +8,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class TelaNovaEncomenda extends JDialog {
     private final FreteService freteService;
@@ -64,9 +66,10 @@ public class TelaNovaEncomenda extends JDialog {
         //Ordenar Alfabeticamente Enumeração
         List<Estado> listaEstados = new ArrayList<>(List.of(Estado.values()));
         Collections.sort(listaEstados, (e1, e2) -> e1.name().compareTo(e2.name()));
+        Estado[] estadosOrdenados = listaEstados.toArray(new Estado[0]);
         btnFinalizar.addActionListener(e -> {
-            freteEmCriacao.setOrigem((Estado) JOptionPane.showInputDialog(this, "Origem:", "Origem", JOptionPane.QUESTION_MESSAGE, null, Estado.values(), Estado.values()[0]));
-            freteEmCriacao.setDestino((Estado) JOptionPane.showInputDialog(this, "Destino:", "Destino", JOptionPane.QUESTION_MESSAGE, null, Estado.values(), Estado.values()[0]));
+            freteEmCriacao.setOrigem((Estado) JOptionPane.showInputDialog(this, "Origem:", "Origem", JOptionPane.QUESTION_MESSAGE, null, estadosOrdenados, estadosOrdenados[0]));
+            freteEmCriacao.setDestino((Estado) JOptionPane.showInputDialog(this, "Destino:", "Destino", JOptionPane.QUESTION_MESSAGE, null, estadosOrdenados, estadosOrdenados[0]));
             freteEmCriacao.setData(Instant.now());
             freteEmCriacao.calcularTotal();
             freteService.salvar(freteEmCriacao);
